@@ -3,17 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Port;
+use App\Models\Cruise;
 use Illuminate\Http\Request;
 
 class PortController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -61,8 +56,16 @@ class PortController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Port $port)
+    public function destroy($id)
     {
-        //
+        $port = Port::find($id);
+        $Cruise = Cruise::find($id);
+        if ($port) {
+            Cruise::where('port_id', $port->id)->delete();
+            $port->delete();
+            return response()->json(['message' => 'Port deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Port not found'], 404);
+        }
     }
 }

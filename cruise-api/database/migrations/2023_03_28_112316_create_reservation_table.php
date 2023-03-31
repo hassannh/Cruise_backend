@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cruise;
+use App\Models\Parking;
 use App\Models\User;
 use App\Models\Room;
 use Illuminate\Database\Migrations\Migration;
@@ -14,10 +15,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('reservation', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained('users')->cascadeOnDelete();
+            $table->foreignIdFor(Cruise::class)->constrained('cruises')->cascadeOnDelete();
             $table->foreignIdFor(Room::class)->constrained('rooms')->cascadeOnDelete();
+            $table->foreignIdFor(Parking::class)->constrained('parkings')->cascadeOnDelete();
+            $table->bigInteger('price');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('reservation');
     }
 };

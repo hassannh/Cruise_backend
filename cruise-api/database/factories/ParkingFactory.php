@@ -16,8 +16,12 @@ class ParkingFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = \Faker\Factory::create();
+        $ship = \App\Models\Ship::inRandomOrder()->first();
         return [
-            //
+            
+            'place_number'=>$this->faker->randomNumber(),
+            'ship_id' => $ship ? $ship->id : \App\Models\Ship::factory()->create()->id,
         ];
     }
 }

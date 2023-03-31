@@ -24,6 +24,7 @@ class CruiseFactory extends Factory
             'ship_id' => $ship ? $ship->id : \App\Models\Ship::factory()->create()->id,
             'price' => $this->faker->randomNumber(3),
             'picture' => $this->faker->text(30),
+            'start_date' => $this->faker->dateTime(),
             'nights_number' => $this->faker->randomNumber(3),
             'port_id' => $port ? $port->id : \App\Models\Port::factory()->create()->id,
         ];
