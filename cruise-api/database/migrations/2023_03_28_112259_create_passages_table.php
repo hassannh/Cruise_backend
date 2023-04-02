@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('passage', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Cruise::class)->constrained('cruises')->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Port::class)->constrained('ports')->cascadeOnDelete();         
             $table->timestamps();
         });
     }

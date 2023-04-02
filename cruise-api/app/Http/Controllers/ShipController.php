@@ -21,6 +21,17 @@ class ShipController extends Controller
             return response()->json(['error' => 'Ship not found'], 404);
         }
     }
+    function getShipADD()
+    {
+        $Ship = Ship::all();
+        if ($Ship) {
+            // Return the port as JSON data
+            return response()->json(['Ship' => $Ship]);
+        } else {
+
+            return response()->json(['error' => 'Ship not found'], 404);
+        }
+    }
 
 //get company users
 

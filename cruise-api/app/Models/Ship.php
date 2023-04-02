@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Ship extends Model
 {
     use HasFactory;
+
+    public function parking()
+    {
+        return $this->hasMany(Parking::class);
+    }
+
 }

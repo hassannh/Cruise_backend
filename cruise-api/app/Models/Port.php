@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Port extends Model
 {
     use HasFactory;
+
+    public function cruise()
+    {
+        return $this->belongsTo(Cruise::class);
+    }
 }
