@@ -37,7 +37,7 @@ Route::delete('/destroyCruise/{id}', [CruiseController::class,'destroy'] );
 //Reservation//
 Route::post('/addReservation', [ReservationController::class,'addReservation'] );
 Route::get('/getReservation/{id}', [ReservationController::class,'getReservation'] );
-Route::get('/getReservationsByUserId/{id}', [ReservationController::class,'getReservationsByUserId'] );
+Route::get('/tickets/{id}', [ReservationController::class,'getReservationsByUserId'] );
 Route::post('/updateReservation/{id}', [ReservationController::class,'updateReservation'] );
 
 

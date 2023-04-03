@@ -68,12 +68,12 @@ class ReservationController extends Controller
         $reservations = Reservation::where('user_id', $user_id)->get();
 
         // check if any reservations were found
-        if ($reservations->isEmpty()) {
-            return response()->json(['message' => 'No reservations found for this user'], 404);
+        if ($reservations) {
+            // return reservations data
+            return response()->json(['reservations' => $reservations]);
         }
-
-        // return reservations data
-        return response()->json($reservations);
+        
+        return response()->json(['message' => 'No reservations found for this user'], 404);
     }
 
 
