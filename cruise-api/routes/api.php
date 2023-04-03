@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\ShipController;
 use App\Http\Controllers\CruiseController;
+use App\Http\Controllers\ParkingController;
 use App\Http\Controllers\ReservationController;
 
 /*
@@ -56,3 +58,14 @@ Route::get('/getShipADD', [ShipController::class,'getShipADD'] );
 Route::get('/getcompany', [ShipController::class,'getcompany'] );
 Route::delete('/destroyShip/{id}', [ShipController::class,'destroy'] );
 
+
+
+
+//room//
+Route::get('/getRoom_type', [RoomController::class,'getRoom_type'] );
+
+
+
+
+//parking//
+Route::get('/getParking', [ParkingController::class,'getParking'] );

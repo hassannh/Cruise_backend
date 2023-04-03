@@ -61,20 +61,42 @@ class ReservationController extends Controller
     }
 
 
+    /**
+     * Display reservation by id user
+     */
 
-    public function getReservationsByUserId($user_id)
-    {
-        // find reservations with given user ID
-        $reservations = Reservation::where('user_id', $user_id)->get();
 
-        // check if any reservations were found
-        if ($reservations) {
-            // return reservations data
-            return response()->json(['reservations' => $reservations]);
-        }
-        
+public function getReservationsByUserId($user_id)
+{
+    // find reservations with given user ID
+    $reservations = Reservation::where('user_id', $user_id)->get();
+
+    // check if any reservations were found
+    if ($reservations->isEmpty()) {
         return response()->json(['message' => 'No reservations found for this user'], 404);
     }
+    
+    // retrieve the corresponding cruise names, start dates, and pictures for the reservations
+    $cruise_data = Cruise::whereIn('id', $reservations->pluck('cruise_id'))
+        ->select(['id', 'name', 'start_date', 'picture','nights_number','price'])
+        ->get()
+        ->keyBy('id');
+
+    // merge the cruise data into the reservations collection
+    $reservations = $reservations->map(function ($reservation) use ($cruise_data) {
+        $cruise = $cruise_data[$reservation->cruise_id];
+        $reservation['cruise_name'] = $cruise->name;
+        $reservation['cruise_start_date'] = $cruise->start_date;
+        $reservation['cruise_picture'] = $cruise->picture;
+        $reservation['nights_number'] = $cruise->nights_number;
+        $reservation['price'] = $cruise->price;
+        return $reservation;
+    });
+
+    // return reservations data
+    return response()->json(['reservations' => $reservations]);
+}
+
 
 
     /**

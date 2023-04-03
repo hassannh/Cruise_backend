@@ -10,9 +10,17 @@ class ParkingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function getParking()
     {
-        //
+        $Parking = Parking::all();
+
+        // check if any rooms were found
+        if ($Parking->isEmpty()) {
+            return response()->json(['message' => 'No places found'], 404);
+        } else {
+
+            return response()->json(['Parking' => $Parking]);
+        }
     }
 
     /**
