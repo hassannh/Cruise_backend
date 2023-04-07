@@ -2,46 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Cruise;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
 
-
+protected $fillable = [
+    'user_id',
+    'cruise_id',
+    'room_id',
+    'parking_id',
+    'price',
+];
     /**
      * Store a newly created resource in storage.
      */
-    public function addReservation(Request $request)
+    public function addReservation(Request $request,$id)
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'user_id' => 'required|integer',
-            'cruise_id' => 'required|integer',
-            'room_id' => 'required|integer',
-            'parking_id' => 'nullable|integer',
-            'price' => 'required|numeric',
+            
+            'room_id' => 'integer',
+            'parking_id' => 'integer',
+            'price' => 'numeric',
         ]);
-
-        // Create a new reservation model instance with the validated data
-        $reservation = new Reservation([
-            'user_id' => $validatedData['user_id'],
-            'cruise_id' => $validatedData['cruise_id'],
-            'room_id' => $validatedData['room_id'],
-            'parking_id' => $validatedData['parking_id'],
-            'price' => $validatedData['price'],
-        ]);
-
-        // Save the new reservation to the database
-        $reservation->save();
-
-        // Return a response indicating success
-        return response()->json([
-            'message' => 'Reservation added successfully',
-            'reservation' => $reservation,
-        ], 201);
+        
+        if (Auth()->check()) {
+            $reservation = new Reservation([
+                'user_id' => auth()->id(),
+                'cruise_id' => $id,
+                'room_id' => $validatedData['room_id'],
+                'parking_id' => $validatedData['parking_id'],
+                'price' => $validatedData['price'],
+            ]);
+            
+            $reservation->save();
+            return response()->json([
+                'message' => 'Reservation added successfully',
+                'reservation' =>  $reservation,
+            ], 201);
+        }
+        else {
+            return response()->json([
+                'message' => 'You are not logged in',
+            ], 401);
+            
+        }
     }
+       
+
+
+        // return response()->json([
+        //     'message' => 'Reservation added successfully',
+        //     'reservation' => $reservation,
+        // ], 201);
+    
+
 
     /**
      * Display the specified resource.

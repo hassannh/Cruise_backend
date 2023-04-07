@@ -80,9 +80,10 @@ class CruiseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cruise $cruise)
+    public function show($id)
     {
-        //
+        $cruise_data = Cruise::find($id);
+            return $cruise_data;
     }
 
     /**
@@ -93,9 +94,9 @@ class CruiseController extends Controller
         $Cruise = Cruise::find($id);
         if ($Cruise) {
             $Cruise->delete();
-            return response()->json(['message' => 'Port deleted successfully']);
+            return response()->json(['message' => 'cruise deleted successfully']);
         } else {
-            return response()->json(['message' => 'Port not found'], 404);
+            return response()->json(['message' => 'cruise not found'], 404);
         }
     }
 }

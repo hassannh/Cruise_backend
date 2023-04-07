@@ -19,7 +19,7 @@ class RoomController extends Controller
     // if ($room->isEmpty()) {
     //     return response()->json(['message' => 'No reservations found for this user'], 404);
     // }
-    
+
     // // retrieve the corresponding room names, and price for the room
     // $Room_data = Room::whereIn('id', $room->pluck('room_type_id'))
     //     ->select(['id', 'name', 'price'])
@@ -36,31 +36,31 @@ class RoomController extends Controller
     // }
 
     public function getRoom_type()
-{
-    $rooms = Room::all();
+    {
+        $rooms = Room::all();
 
-    // check if any rooms were found
-    if ($rooms->isEmpty()) {
-        return response()->json(['message' => 'No rooms found'], 404);
+        // check if any rooms were found
+        if ($rooms->isEmpty()) {
+            return response()->json(['message' => 'No rooms found'], 404);
+        }
+
+        // retrieve the corresponding room names and prices
+        $roomData = RoomType::whereIn('id', $rooms->pluck('room_type_id'))
+            ->select(['id', 'name', 'price'])
+            ->get()
+            ->keyBy('id');
+
+        $response = $rooms->map(function ($room) use ($roomData) {
+            $data = $roomData[$room->room_type_id];
+            $room->room_name = $data->name;
+            $room->room_price = $data->price;
+            return $room;
+        });
+
+        return response()->json(['rooms' => $response]);
     }
-    
-    // retrieve the corresponding room names and prices
-    $roomData = RoomType::whereIn('id', $rooms->pluck('room_type_id'))
-        ->select(['id', 'name', 'price'])
-        ->get()
-        ->keyBy('id');
 
-    $response = $rooms->map(function ($room) use ($roomData) {
-        $data = $roomData[$room->room_type_id];
-        $room->room_name = $data->name;
-        $room->room_price = $data->price;
-        return $room;
-    });
 
-    return response()->json(['rooms' => $response]);
-}
-
-     
 
 
     /**
@@ -74,9 +74,10 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Room $room)
+    public function show($roomType_Id)
     {
-        //
+        $room = Room::where('room_type_id', $roomType_Id)->first();
+        return response()->json(['roomId' => $room->id]);
     }
 
     /**
