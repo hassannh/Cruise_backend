@@ -28,21 +28,23 @@ class CruiseController extends Controller
     public function addCruise(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'picture' => 'required|image',
-            'nights_number' => 'required|numeric',
-            'start_date' => 'required|date',
-            'ship_id' => 'required|exists:ships,id',
-            'port_id' => 'required|exists:ports,id',
+            'name' => 'string|max:255',
+            'price' => 'numeric',
+            'picture' => 'image',
+            'nights_number' => 'integer',
+            'start_date' => 'date',
+            'ship_id' => 'exists:ships,id',
+            'port_id' => 'exists:ports,id',
         ]);
     
         $picturePath = $request->file('picture')->store('public/pictures');
     
         $cruise = new Cruise;
+        
         $cruise->name = $validated['name'];
         $cruise->price = $validated['price'];
-        $cruise->picture = Storage::url($picturePath);
+        $cruise->picture = $picturePath ;
+        // $cruise->picture = Storage::url($picturePath);
         $cruise->nights_number = $validated['nights_number'];
         $cruise->start_date = $validated['start_date'];
         $cruise->ship_id = $validated['ship_id'];

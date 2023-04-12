@@ -15,7 +15,19 @@ class PortController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'string|max:255',
+        ]);
+
+        $port = new Port;
+        $port->name = $validated['name'];
+        $port->save();
+
+        if ($port->save()) {
+            return response()->json($port, 201);
+        } else {
+            return response()->json(['error' => 'Port not saved'], 404);
+        }
     }
 
     /**

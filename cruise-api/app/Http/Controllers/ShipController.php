@@ -52,7 +52,19 @@ class ShipController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'string|max:255',
+        ]);
+
+        $Ship = new Ship;
+        $Ship->name = $validated['name'];
+        $Ship->save();
+
+        if ($Ship->save()) {
+            return response()->json($Ship, 201);
+        } else {
+            return response()->json(['error' => 'Port not saved'], 404);
+        }
     }
 
     /**

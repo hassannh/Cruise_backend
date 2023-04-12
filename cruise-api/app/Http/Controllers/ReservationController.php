@@ -159,13 +159,11 @@ public function getReservationsByUserId($user_id)
     public function destroy($id)
     {
         $Reservation = Reservation::find($id);
-        $Cruise = Cruise::find($id);
         if ($Reservation) {
-            Cruise::where('port_id', $Reservation->id)->delete();
             $Reservation->delete();
-            return response()->json(['message' => 'Port deleted successfully']);
+            return response()->json(['message' => 'reservation deleted successfully']);
         } else {
-            return response()->json(['message' => 'Port not found'], 404);
+            return response()->json(['message' => 'reservation not found'], 404);
         }
     }
 }
