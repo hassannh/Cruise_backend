@@ -39,11 +39,13 @@ Route::get('/show/{id}', [CruiseController::class,'show'] )->middleware('auth');
 
 
 //Reservation//
-Route::post('/addReservation/{id}', [ReservationController::class,'addReservation'] );
-Route::get('/getReservation/{id}', [ReservationController::class,'getReservation'] )->middleware('auth');
-Route::get('/tickets/{id}', [ReservationController::class,'getReservationsByUserId'] )->middleware('auth');
-Route::post('/updateReservation/{id}', [ReservationController::class,'updateReservation'] )->middleware('auth');
-Route::delete('/destroyReservation/{id}', [ReservationController::class,'destroy'] );
+Route::middleware(['auth'])->group(function () {
+    Route::post('/addReservation/{id}', [ReservationController::class,'addReservation']);
+    Route::get('/getReservation/{id}', [ReservationController::class,'getReservation']);
+    Route::get('/tickets/{id}', [ReservationController::class,'getReservationsByUserId']);
+    Route::post('/updateReservation/{id}', [ReservationController::class,'updateReservation']);
+    Route::delete('/destroyReservation/{id}', [ReservationController::class,'destroy']);
+});
 
 
 
@@ -68,9 +70,7 @@ Route::delete('/destroyShip/{id}', [ShipController::class,'destroy'] )->middlewa
 
 //room//
 Route::get('/getRoom_type', [RoomController::class,'getRoom_type'] );
-
 Route::get('/getRoom_Id/{roomTypeId}', [RoomController::class,'show'] );
-
 
 
 

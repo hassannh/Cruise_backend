@@ -30,25 +30,40 @@ class CruiseController extends Controller
         $validated = $request->validate([
             'name' => 'string|max:255',
             'price' => 'numeric',
-            'picture' => 'image',
+            'picture' => 'mimes:jpeg,png',
             'nights_number' => 'integer',
             'start_date' => 'date',
             'ship_id' => 'exists:ships,id',
             'port_id' => 'exists:ports,id',
         ]);
     
-        $picturePath = $request->file('picture')->store('public/pictures');
-    
+        $picturePath = null;
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('public/pictures');
+        } 
         $cruise = new Cruise;
         
-        $cruise->name = $validated['name'];
+        if (array_key_exists('name', $validated)) {
+            $cruise->name = $validated['name'];
+        }
+        if (array_key_exists('price', $validated)) {
         $cruise->price = $validated['price'];
+        }
         $cruise->picture = $picturePath ;
-        // $cruise->picture = Storage::url($picturePath);
+        
+        if (array_key_exists('nights_number', $validated)) {
         $cruise->nights_number = $validated['nights_number'];
+        }
+        if (array_key_exists('start_date', $validated)) {
         $cruise->start_date = $validated['start_date'];
+        }
+        if (array_key_exists('ship_id', $validated)) {
         $cruise->ship_id = $validated['ship_id'];
+        }
+        if (array_key_exists('port_id', $validated)) {
         $cruise->port_id = $validated['port_id'];
+        }
+
         $cruise->save();
 
         if ($cruise->save()) {
@@ -69,7 +84,6 @@ class CruiseController extends Controller
         ->select('cruises.*', 'ports.name as port_name')
         ->get();
 
-        
         if ($cruises) {
             // Return the cruises as JSON data
             return response()->json(['cruises' => $cruises]);
