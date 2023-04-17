@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cruise;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,13 +14,48 @@ class CruiseController extends Controller
     /**
      * Display a listing of the resource.
      */
-    function get_cruise()
-    {
-       
-            $cruise_data = Cruise::paginate(5);
-            echo json_encode($cruise_data);
+    // function get_cruise()
+    // {   
+    //         try {
+    //             $articlePerPage = 5; 
+
+    //             $cruise_data = Cruise::simplePaginate($articlePerPage);
+                
+    //             $pagesCount = Cruise::count() / $articlePerPage; 
+              
+    //             return [
+    //                 'cruises' => $cruise_data->items(),
+    //                 'pagesCount' => $cruise_data->lastPage()
+    //             ];
+    //             } catch (\Exception $e) {
+    //                 return response()->json([
+    //                     'message' => $e->getMessage(),
+    //                 ], 500);
+    //             }
             
-        }
+    //     }
+
+
+    public function get_cruise()
+{
+    try {
+        // $articlePerPage = 5;
+        $cruise_data = Cruise::orderBy('start_date', 'asc')->paginate(5);
+        $pagesCount = $cruise_data->lastPage();
+
+        $data= [
+            'cruises' => $cruise_data->items(),
+            'pagesCount' => $pagesCount
+        ];
+        return response()->json($data);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+}
+
      
         
     /**
@@ -98,7 +134,7 @@ class CruiseController extends Controller
      */
     public function show($id)
     {
-        $cruise_data = Cruise::find($id);
+        $cruise_data = Cruise::all($id);
             return $cruise_data;
     }
 

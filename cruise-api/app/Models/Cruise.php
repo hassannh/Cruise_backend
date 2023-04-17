@@ -9,6 +9,8 @@ class Cruise extends Model
 {
     use HasFactory;
 
+
+
     public function passage()
     {
         return $this->hasMany(Passage::class);
@@ -29,5 +31,10 @@ class Cruise extends Model
         return $this->belongsTo(Ship::class);
     }
 
-    
+    // public function getCruises()
+    // {
+    //     $cruises = Cruise::orderBy('start_date')->simplePaginate(10);
+
+    //     return view('cruises.get_cruise', ['cruises' => $cruises]);
+    // }
 }
