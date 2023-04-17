@@ -39,9 +39,10 @@ class CruiseController extends Controller
     public function get_cruise()
 {
     try {
-        // $articlePerPage = 5;
-        $cruise_data = Cruise::orderBy('start_date', 'asc')->paginate(5);
-        $pagesCount = $cruise_data->lastPage();
+        $articlePerPage = 5;
+        $cruise_data = Cruise::orderBy('start_date', 'asc')->simplePaginate($articlePerPage);
+        // return $cruise_data;
+        $pagesCount = ceil(Cruise::count() / $articlePerPage);
 
         $data= [
             'cruises' => $cruise_data->items(),
