@@ -11,37 +11,14 @@ use Illuminate\Support\Facades\Validator;
 
 class CruiseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // function get_cruise()
-    // {   
-    //         try {
-    //             $articlePerPage = 5; 
-
-    //             $cruise_data = Cruise::simplePaginate($articlePerPage);
-                
-    //             $pagesCount = Cruise::count() / $articlePerPage; 
-              
-    //             return [
-    //                 'cruises' => $cruise_data->items(),
-    //                 'pagesCount' => $cruise_data->lastPage()
-    //             ];
-    //             } catch (\Exception $e) {
-    //                 return response()->json([
-    //                     'message' => $e->getMessage(),
-    //                 ], 500);
-    //             }
-            
-    //     }
-
-
+    
+    
     public function get_cruise()
 {
     try {
-        $articlePerPage = 5;
+       
+        $articlePerPage = 8;
         $cruise_data = Cruise::orderBy('start_date', 'asc')->simplePaginate($articlePerPage);
-        // return $cruise_data;
         $pagesCount = ceil(Cruise::count() / $articlePerPage);
 
         $data= [
@@ -117,13 +94,16 @@ class CruiseController extends Controller
      */
     public function cruiseAdmin(Cruise $cruises)
     {
+        $articlePerPage = 5 ;
         $cruises = Cruise::join('ports', 'cruises.id', '=', 'ports.id')
-        ->select('cruises.*', 'ports.name as port_name')
-        ->get();
+        ->select('cruises.*', 'ports.name as port_name')->simplePaginate($articlePerPage);
+        $pagesCount = ceil(Cruise::count() / $articlePerPage);
+        
 
         if ($cruises) {
             // Return the cruises as JSON data
-            return response()->json(['cruises' => $cruises]);
+            return response()->json(['cruises' => $cruises->items(),
+                                        'pagesCount' => $pagesCount]);
         } else {
             // Return an error message if the cruises were not found
             return response()->json(['error' => 'Cruises not found'], 404);

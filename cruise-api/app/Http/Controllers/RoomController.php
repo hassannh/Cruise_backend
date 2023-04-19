@@ -11,29 +11,6 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function getRoom_type()
-    // {
-    //     $room = Room::all();
-
-    //      // check if any rooms were found
-    // if ($room->isEmpty()) {
-    //     return response()->json(['message' => 'No reservations found for this user'], 404);
-    // }
-
-    // // retrieve the corresponding room names, and price for the room
-    // $Room_data = Room::whereIn('id', $room->pluck('room_type_id'))
-    //     ->select(['id', 'name', 'price'])
-    //     ->get()
-    //     ->keyBy('id');
-
-    //     $room = $room->map(function ($room) use ($Room_data) {
-    //         $room = $Room_data[$Room_data->room_type_id];
-    //         $room['room_name'] = $room->name;
-    //         $room['room_price'] = $room->price;
-
-    //         return response()->json(['room' => $room]);
-    //     });
-    // }
 
     public function getRoom_type()
     {

@@ -10,12 +10,6 @@ class Cruise extends Model
     use HasFactory;
 
 
-
-    public function passage()
-    {
-        return $this->hasMany(Passage::class);
-    }
-
     public function reservation()
     {
         return $this->hasMany(Reservation::class);

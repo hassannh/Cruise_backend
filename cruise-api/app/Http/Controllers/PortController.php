@@ -35,10 +35,15 @@ class PortController extends Controller
      */
     public function portAdmin()
     {
-        $port = port::paginate(5);
+        $articlePerPage = 5;
+        $port = port::orderBy('name', 'asc')->simplePaginate($articlePerPage);
+        $pagesCount = ceil(port::count() / $articlePerPage);
+
+
         if ($port) {
             // Return the port as JSON data
-            return response()->json(['port' => $port]);
+            return response()->json(['port' => $port->items(),
+                                    'pagesCount' => $pagesCount]);
         } else {
 
             return response()->json(['error' => 'port not found'], 404);

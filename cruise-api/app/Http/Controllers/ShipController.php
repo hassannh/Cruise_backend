@@ -12,10 +12,14 @@ class ShipController extends Controller
    
     function getShip()
     {
-        $Ship = Ship::paginate(5);
+        $articlePerPage = 5;
+        $Ship = Ship::orderBy('name', 'asc')->simplePaginate($articlePerPage);
+                $pagesCount = ceil(ship::count() / $articlePerPage);
+
         if ($Ship) {
             // Return the port as JSON data
-            return response()->json(['Ship' => $Ship]);
+            return response()->json(['Ship' => $Ship->items(),
+                                    'pagesCount' => $pagesCount]);
         } else {
 
             return response()->json(['error' => 'Ship not found'], 404);
